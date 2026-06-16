@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Restore backend
+        run: dotnet restore
+
+      - name: Build backend
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test backend
+        run: dotnet test --configuration Release --no-build
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/Web/agrisure-web/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: src/Web/agrisure-web
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: src/Web/agrisure-web
+        run: npm run build
+
+      - name: Validate Docker Compose
+        run: docker compose config --quiet

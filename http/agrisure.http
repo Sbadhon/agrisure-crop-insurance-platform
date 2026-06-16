@@ -1,0 +1,41 @@
+@gateway = http://localhost:8080
+@tenant = northstar-agency
+@policyId = 20000000-0000-0000-0000-000000000001
+@fieldId = 30000000-0000-0000-0000-000000000001
+
+### Policy as producer
+GET {{gateway}}/api/policies/{{policyId}}
+X-Tenant-Id: {{tenant}}
+X-Actor-Id: producer-1001
+X-Actor-Name: Jordan Miller
+X-Role: Producer
+
+### Report a loss as producer
+POST {{gateway}}/api/claims
+Content-Type: application/json
+X-Tenant-Id: {{tenant}}
+X-Actor-Id: producer-1001
+X-Actor-Name: Jordan Miller
+X-Role: Producer
+
+{
+  "policyId": "{{policyId}}",
+  "fieldId": "{{fieldId}}",
+  "lossDate": "2026-06-12",
+  "lossCause": "Hail",
+  "description": "Hail damage observed across the northern field."
+}
+
+### List claims as reviewer
+GET {{gateway}}/api/claims
+X-Tenant-Id: {{tenant}}
+X-Actor-Id: reviewer-4001
+X-Actor-Name: Casey Patel
+X-Role: ClaimsReviewer
+
+### Operations dashboard
+GET {{gateway}}/api/operations/dashboard
+X-Tenant-Id: {{tenant}}
+X-Actor-Id: ops-5001
+X-Actor-Name: Riley Chen
+X-Role: Operations

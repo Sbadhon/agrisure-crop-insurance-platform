@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Contracts", "src/Contracts/AgriSure.Contracts/AgriSure.Contracts.csproj", "{8E9E177E-6476-42BE-84FB-29588FF9D7A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.BuildingBlocks", "src/BuildingBlocks/AgriSure.BuildingBlocks/AgriSure.BuildingBlocks.csproj", "{645BDBDF-18B7-4808-8C2E-3DC3AEB7659C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Policy.Api", "src/Services/Policy/AgriSure.Policy.Api/AgriSure.Policy.Api.csproj", "{9F95B16C-5F0A-43A8-BA01-93078BC5B751}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Claims.Api", "src/Services/Claims/AgriSure.Claims.Api/AgriSure.Claims.Api.csproj", "{59EC46FD-B0AA-4B65-84C3-AC1083355FB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Operations.Api", "src/Services/Operations/AgriSure.Operations.Api/AgriSure.Operations.Api.csproj", "{2FD6F06D-9752-4845-BE51-B94101E6EEA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Gateway", "src/Gateway/AgriSure.Gateway/AgriSure.Gateway.csproj", "{2C3DE96C-9C67-4B83-B2C1-D745E98483CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgriSure.Claims.UnitTests", "tests/AgriSure.Claims.UnitTests/AgriSure.Claims.UnitTests.csproj", "{34A6EB68-18A3-414A-8D9E-6008C76E95E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E9E177E-6476-42BE-84FB-29588FF9D7A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E9E177E-6476-42BE-84FB-29588FF9D7A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E9E177E-6476-42BE-84FB-29588FF9D7A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E9E177E-6476-42BE-84FB-29588FF9D7A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645BDBDF-18B7-4808-8C2E-3DC3AEB7659C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645BDBDF-18B7-4808-8C2E-3DC3AEB7659C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645BDBDF-18B7-4808-8C2E-3DC3AEB7659C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645BDBDF-18B7-4808-8C2E-3DC3AEB7659C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F95B16C-5F0A-43A8-BA01-93078BC5B751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F95B16C-5F0A-43A8-BA01-93078BC5B751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F95B16C-5F0A-43A8-BA01-93078BC5B751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F95B16C-5F0A-43A8-BA01-93078BC5B751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EC46FD-B0AA-4B65-84C3-AC1083355FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EC46FD-B0AA-4B65-84C3-AC1083355FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EC46FD-B0AA-4B65-84C3-AC1083355FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EC46FD-B0AA-4B65-84C3-AC1083355FB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD6F06D-9752-4845-BE51-B94101E6EEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD6F06D-9752-4845-BE51-B94101E6EEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD6F06D-9752-4845-BE51-B94101E6EEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD6F06D-9752-4845-BE51-B94101E6EEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C3DE96C-9C67-4B83-B2C1-D745E98483CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C3DE96C-9C67-4B83-B2C1-D745E98483CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C3DE96C-9C67-4B83-B2C1-D745E98483CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C3DE96C-9C67-4B83-B2C1-D745E98483CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A6EB68-18A3-414A-8D9E-6008C76E95E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A6EB68-18A3-414A-8D9E-6008C76E95E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A6EB68-18A3-414A-8D9E-6008C76E95E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A6EB68-18A3-414A-8D9E-6008C76E95E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

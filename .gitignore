@@ -1,0 +1,23 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.cache
+TestResults/
+coverage/
+
+# Node
+**/node_modules/
+**/dist/
+*.tsbuildinfo
+
+# Environment and IDE
+.env
+.DS_Store
+.vscode/
+.idea/
+
+# Local data
+.local/
+*.log

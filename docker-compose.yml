@@ -1,0 +1,143 @@
+name: agrisure
+
+services:
+  policy-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: agrisure_policy
+      POSTGRES_USER: ${POSTGRES_USER:-agrisure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agrisure-dev}
+    ports:
+      - "5433:5432"
+    volumes:
+      - policy-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agrisure} -d agrisure_policy"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  claims-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: agrisure_claims
+      POSTGRES_USER: ${POSTGRES_USER:-agrisure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agrisure-dev}
+    ports:
+      - "5434:5432"
+    volumes:
+      - claims-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agrisure} -d agrisure_claims"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  operations-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: agrisure_operations
+      POSTGRES_USER: ${POSTGRES_USER:-agrisure}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agrisure-dev}
+    ports:
+      - "5435:5432"
+    volumes:
+      - operations-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agrisure} -d agrisure_operations"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-agrisure}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-agrisure-dev}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  policy-api:
+    build:
+      context: .
+      dockerfile: src/Services/Policy/AgriSure.Policy.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PolicyDatabase: Host=policy-db;Port=5432;Database=agrisure_policy;Username=${POSTGRES_USER:-agrisure};Password=${POSTGRES_PASSWORD:-agrisure-dev}
+      RabbitMq__Uri: amqp://${RABBITMQ_DEFAULT_USER:-agrisure}:${RABBITMQ_DEFAULT_PASS:-agrisure-dev}@rabbitmq:5672
+    ports:
+      - "5101:8080"
+    depends_on:
+      policy-db:
+        condition: service_healthy
+
+  claims-api:
+    build:
+      context: .
+      dockerfile: src/Services/Claims/AgriSure.Claims.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__ClaimsDatabase: Host=claims-db;Port=5432;Database=agrisure_claims;Username=${POSTGRES_USER:-agrisure};Password=${POSTGRES_PASSWORD:-agrisure-dev}
+      Services__PolicyApi: http://policy-api:8080
+      RabbitMq__Uri: amqp://${RABBITMQ_DEFAULT_USER:-agrisure}:${RABBITMQ_DEFAULT_PASS:-agrisure-dev}@rabbitmq:5672
+    ports:
+      - "5102:8080"
+    depends_on:
+      claims-db:
+        condition: service_healthy
+      policy-api:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  operations-api:
+    build:
+      context: .
+      dockerfile: src/Services/Operations/AgriSure.Operations.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__OperationsDatabase: Host=operations-db;Port=5432;Database=agrisure_operations;Username=${POSTGRES_USER:-agrisure};Password=${POSTGRES_PASSWORD:-agrisure-dev}
+      RabbitMq__Uri: amqp://${RABBITMQ_DEFAULT_USER:-agrisure}:${RABBITMQ_DEFAULT_PASS:-agrisure-dev}@rabbitmq:5672
+    ports:
+      - "5103:8080"
+    depends_on:
+      operations-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  gateway:
+    build:
+      context: .
+      dockerfile: src/Gateway/AgriSure.Gateway/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ReverseProxy__Clusters__policy-cluster__Destinations__policy-api__Address: http://policy-api:8080
+      ReverseProxy__Clusters__claims-cluster__Destinations__claims-api__Address: http://claims-api:8080
+      ReverseProxy__Clusters__operations-cluster__Destinations__operations-api__Address: http://operations-api:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - policy-api
+      - claims-api
+      - operations-api
+
+  web:
+    build:
+      context: .
+      dockerfile: src/Web/agrisure-web/Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
+
+volumes:
+  policy-data:
+  claims-data:
+  operations-data:
